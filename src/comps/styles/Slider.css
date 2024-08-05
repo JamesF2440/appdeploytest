@@ -1,0 +1,53 @@
+.Slider{
+  align-items: center;
+  height: 10vh;
+  gap: 10px;
+}
+
+.lowerLimit{
+    white-space: nowrap;
+    justify-content: left;
+}
+
+.lowerText{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    width: 75%; 
+    max-width:90%;
+    margin-left: 13.5%;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    -webkit-appearance: none; 
+    -webkit-transition: 0.2s;
+    appearance: none;
+    width: 50%; 
+    height: 15px; 
+    background: #ddd; 
+    outline: none;
+    opacity: 0.9;
+    transition: opacity .2s;
+    border-radius: 15px;
+    transform: scale(1.5);
+    
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    appearance: none;
+    width: 30px; 
+    height: 30px; 
+    background: #ef0303; 
+    cursor: pointer; 
+    border-radius: 50%; 
+    background-image: url("../../assets/thumbButton.png");
+    background-size:cover;
+    background-position-x: center;
+    background-position-y: center;
+  }
+
+
+
+  

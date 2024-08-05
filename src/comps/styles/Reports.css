@@ -1,0 +1,15 @@
+.pageContainer {
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+    background-color:rgb(221,221,221);
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+
+
+.pageContainer.shrink{
+width: 62%;
+}

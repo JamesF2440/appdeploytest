@@ -1,0 +1,121 @@
+.popupBox{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 60%;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.popupBox.shrink{
+    left: 31%;
+    width: 40%;
+    transition: width 0.3s ease-in-out;
+}
+
+.popupOverlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    z-index: 999; /* Ensure it sits behind the popup */
+    width: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
+.popupOverlay.shrink{
+    width: 80%;
+    transition: width 0.3s ease-in-out;
+}
+
+.closeOverlay{
+    position: fixed;
+    right: 0;
+    font-weight: 900;
+    background-color: #fff;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    cursor: pointer;
+    border: none;
+}
+
+.graphInputs select,
+.graphInputs input[type="text"],
+.graphInputs button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; /* Ensures padding doesn't increase the size */
+}
+
+.removeLabelDataPair {
+    right: 50px;
+    position: absolute;
+    background-color: #ff0000;
+    color: black;
+    cursor: pointer;
+    padding: 10px;
+    margin-top: 0.75%;
+    border: none;
+  }
+  
+  .addRemoveData button:hover {
+    background-color: #b30000;
+  }
+
+.addRemoveData input[type='text']{
+    position: inherit;
+    padding: 10px;
+    margin: 5px;
+    width: 25%;
+}
+
+.addLabelDataPair{
+    position: inherit;
+    left: 46%;    
+    background-color: #ff0000;
+    color: black;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    overflow-y: auto;
+}
+
+.addRemoveData select{
+    padding: 10px;
+    margin: 5px;
+    width: 25%;
+}
+
+.popupBottom{
+    position: inherit;
+    width: 100%;
+    bottom: 0;
+}
+
+.createGraphButton{
+    margin: 10px;
+    padding: 10px;
+    width: 10%;
+    background-color: #ff0000;
+    color: black;
+    cursor: pointer;
+    border: 1px black solid;
+}
+
+.scrollableInputs{
+    position: inherit;
+    width: 100%;
+    height: 65%; /* Adjust height as needed */
+    overflow-y: auto; /* Allows vertical scrolling */
+}

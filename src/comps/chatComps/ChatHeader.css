@@ -1,0 +1,22 @@
+.ChatHeader{
+    display: flex;
+    align-items: center; /* Align vertically */
+    justify-content: flex-start; /* Align horizontally to the start */
+    position: absolute;
+    background-color: red;
+    background-image: linear-gradient(to left, rgb(255, 255, 255),rgb(221, 221, 221));
+    width: 100%;
+    height: 6.3%;
+    
+}
+.ChatName{
+    position: absolute;
+    left: 20%;
+    font-weight: 300;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.DishLogo{
+    padding-left: 20px;
+    padding-top: 3px;
+}

@@ -1,0 +1,60 @@
+.App {
+  text-align: center;
+}
+
+.pageContainer {
+  padding: 0px;
+  text-align: center;
+  width: 100%;
+  background-color:rgb(221,221,221);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.pageContainer.shrink{
+  width: 62%;
+}
+
+.contentContainer {
+  position: relative;
+  background-color: #ffffff; 
+  padding: 20px; 
+  margin: 20px auto; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; 
+  max-width: 80%; 
+}
+
+
+.containerFooter{
+  padding-top: 50px;
+}
+
+.generateReport{
+  position: inherit;
+  background-color: #000000;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  bottom: 10px;
+  width: 150px;
+  cursor: pointer;
+}
+
+.downloadImg{
+  position: absolute;
+  bottom: 0px; 
+  right: 10px; 
+  padding: 10px;
+  margin-top: 50px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+h1, h3 {
+  margin: 10px 0;
+}
