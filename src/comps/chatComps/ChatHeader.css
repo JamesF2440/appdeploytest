@@ -4,9 +4,9 @@
     justify-content: flex-start; /* Align horizontally to the start */
     position: absolute;
     background-color: red;
-    background-image: linear-gradient(to left, rgb(255, 255, 255),rgb(221, 221, 221));
-    width: 100%;
-    height: 6.3%;
+    background-image: linear-gradient(to left, rgb(170, 170, 170),rgb(221, 221, 221));
+    width: 99%;
+    height: 3rem;
     
 }
 .ChatName{

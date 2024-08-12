@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { ChatBody } from "./ChatBody";
 import "./ChatContainer.css";
 import img from "../../assets/chat.png";
+import { AppContext } from "../../App";
 
 const ChatContainer = ({setCommand, setShrinkMain }) => {
   /*
@@ -10,7 +11,9 @@ const ChatContainer = ({setCommand, setShrinkMain }) => {
     setCommand   : Prop from App to set the command on the initial page. May turn to a useContext later because
                    it prop drills down to ChatBody here.
   */
-  const [chatIsOpen, setChatIsOpen] = useState(false);
+  //const [chatIsOpen, setChatIsOpen] = useState(false);
+  const {chatIsOpen, setChatIsOpen} = useContext(AppContext);
+
   const openChat = () => {
     setChatIsOpen(true);
     setShrinkMain(true);

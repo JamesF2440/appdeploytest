@@ -1,5 +1,5 @@
 import Slider from "./Slider"
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import "./styles/SliderContainer.css";
 import {Chart, Line, Bar, Pie} from 'react-chartjs-2';
 import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend} from 'chart.js';
@@ -9,6 +9,15 @@ import financeImg from "../assets/finance.png"
 import ppvImg from "../assets/ppv.png"
 import travelImg from "../assets/travel.png"
 import cpgImg from "../assets/cpg.png"
+import CustomDropdown from "./CustomDropdown";
+import ChatContainer from "./chatComps/ChatContainer";
+import ChatText  from "./chatComps/ChatText";
+import ChatInput from "./chatComps/ChatInput";
+import axios from "axios";
+import { AppContext } from "../App";
+import load from "../assets/loadingGifSmall.gif"
+import { ChatBody } from "./chatComps/ChatBody";
+
 
 ChartJS.register(
     CategoryScale,
@@ -39,11 +48,55 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
     const [campaignInput, setCampaignInput] = useState(0);
     const [frequencyInput, setFrequencyInput] = useState(0);
     const [liftInput, setLiftInput] = useState(0);
+    const [updateTrigger, setUpdateTrigger] = useState(false);
 
-    
+    const [selectedOption, setSelectedOption] = useState("General");
     const [selectedCategory, setSelectedCategory] = useState("");
 
+    const [activeTab, setActiveTab] = useState("Values");
+
+
+    useEffect(() => {
+        const metricsForModel ={
+            budgetSlider,
+            impressionCount,
+            campaignWeeks,
+            avgFreq,
+            liftSlider,
+            selectedCategory,
+            selectedOption
+        };
+        console.log("Metrics Update:",metricsForModel)
+    },[updateTrigger])
+    
     const randVal = (min, max) => Math.floor(Math.random() * (max-min + 1)) + min;
+
+    useEffect(() => {
+        createNewGraph()
+    }, [graphText])
+
+    const [graphArray, setGraphArray] = useState([]);
+
+    const createNewGraph = () =>{
+
+        if(graphText[0]){
+            console.log("Chart type",graphText[0]);
+            console.log(graphText[1]);
+            console.log(graphText[2]);
+            
+            const strVars = graphText[2];
+            const varlist = strVars.map(val => variableMap[val]);
+            console.log(varlist, "SHOULD BE ACTUALS")
+
+            const graphDataVals = {
+                type: graphText[0],
+                labels: graphText[1],
+                datasets: varlist,
+            }
+            setGraphArray(prevGraphs => [...prevGraphs, graphDataVals])
+        }
+
+    }
 
     const execCmd = (cmd) => {
         const cleanCmd = cmd.toLowerCase();
@@ -93,10 +146,9 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
         }
     }, [command]);
 
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
-        //console.log("Selected Category is now ", selectedCategory);
-    }
+    const handleOptionChange = (option) => {
+        setSelectedOption(option);
+    };
 
     const removeGraph = (index) => {
         const newList = graphArray.filter((_, itemIndex) => itemIndex !== index);
@@ -104,23 +156,13 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
     };
 
     const categoryImages = {
-        item1: autoImg,
-        item2: rxImg,
-        item3: financeImg,
-        item4: ppvImg,
-        item5: travelImg,
-        item6: cpgImg,
+        "Auto": autoImg,
+        "Pharma": rxImg,
+        "Financial": financeImg,
+        "Pay per View": ppvImg,
+        "Travel": travelImg,
+        "Consumer Package Goods": cpgImg,
     };
-
-    const categoryNames = {
-        "" : "Select a Category",
-        item1: "Automotive Total Category",
-        item2: "Pharma Total Category",
-        item3: "Finance Total Category",
-        item4: "Pay-Per-View Total Category",
-        item5: "Travel Total Category",
-        item6: "Consumer Goods Total Category",
-    }
 
     const variableMap = {
         'Budget': budgetSlider,
@@ -159,6 +201,17 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
         frequencyInput ? setAvgFreq(frequencyInput) : setAvgFreq(randVal(0,10));
         campaignInput ? setCampaignWeeks(campaignInput) : setCampaignWeeks(randVal(0,100));
         impressionInput ? setImpressionCount(impressionInput) : setImpressionCount(randVal(0, 100000000));
+
+        // CONSUMES THE INPUTS ON SUBMISSION, REMOVE IF YOU WANT INPUTS TO PERSIST 
+        
+        // setBudgetInput(0); setLiftInput(""); setFrequencyInput(""); setCampaignInput(""); setImpressionInput("");
+        // document.querySelector(".liftInput").value="";
+        // document.querySelector(".budgetInput").value="";
+        // document.querySelector(".impressionInput").value="";
+        // document.querySelector(".campaignInput").value="";
+        // document.querySelector(".frequencyInput").value="";
+        
+        setUpdateTrigger(prev => !prev);
     }
 
     const handleSlider = (value, name) => {
@@ -171,30 +224,30 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
             case 'budget':
                 setBudgetSlider(parseInt(value));
                 // RAND OTHERS
-                setImpressionCount(randVal(0,100000000)) // not great to hardcode upper limit, come back later
-                setCampaignWeeks(randVal(0,100));
-                setAvgFreq(randVal(0,10));
+                // setImpressionCount(randVal(0,100000000)) // not great to hardcode upper limit, come back later
+                // setCampaignWeeks(randVal(0,100));
+                // setAvgFreq(randVal(0,10));
                 break;
             case 'impression count':
                 setImpressionCount(parseInt(value));
                 // RAND OTHERS
-                setBudgetSlider(randVal(0, 1500000));
-                setCampaignWeeks(randVal(0,100));
-                setAvgFreq(randVal(0,10));
+                // setBudgetSlider(randVal(0, 1500000));
+                // setCampaignWeeks(randVal(0,100));
+                // setAvgFreq(randVal(0,10));
                 break;
             case 'campaign weeks':
                 setCampaignWeeks(parseInt(value));
                 // RAND OTHERS
-                setBudgetSlider(randVal(0, 1500000));
-                setImpressionCount(randVal(0,100000000));
-                setAvgFreq(randVal(0,10));
+                // setBudgetSlider(randVal(0, 1500000));
+                // setImpressionCount(randVal(0,100000000));
+                // setAvgFreq(randVal(0,10));
                 break;
             case 'avg frequency':
                 setAvgFreq(parseInt(value));
                 // RAND OTHERS
-                setBudgetSlider(randVal(0, 1500000));
-                setImpressionCount(randVal(0,100000000));
-                setCampaignWeeks(randVal(0,100));
+                // setBudgetSlider(randVal(0, 1500000));
+                // setImpressionCount(randVal(0,100000000));
+                // setCampaignWeeks(randVal(0,100));
                 break;
             case 'lift':
                 setLiftSlider(value);
@@ -207,109 +260,60 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
 
 
     //TEST
-    useEffect(() => {
-        createNewGraph()
-    }, [graphText])
 
-    const [graphArray, setGraphArray] = useState([]);
 
-    const createNewGraph = () =>{
-
-        if(graphText[0]){
-            console.log("Chart type",graphText[0]);
-            console.log(graphText[1]);
-            console.log(graphText[2]);
-            
-            const strVars = graphText[2];
-            const varlist = strVars.map(val => variableMap[val]);
-            console.log(varlist, "SHOULD BE ACTUALS")
-
-            const graphDataVals = {
-                type: graphText[0],
-                labels: graphText[1],
-                datasets: varlist,
-            }
-            setGraphArray(prevGraphs => [...prevGraphs, graphDataVals])
-        }
-
-    }
 
     const options = {
         responsive: true,
     };
 
-    const data = {
-        labels:[
-            "Budget",
-            "Impressions",
-            "Weeks",
-            "Freq"
-        ],
-        datasets : [
-            {
-                label: "Vals",
-                data: [budgetSlider, impressionCount,campaignWeeks, avgFreq],
-                borderColor: "rgb(75,192,192)",
-                borderWidth: "1",
-            },
-        ],
-    };
-
-    const dataTest= {
-        labels:[
-            "Budget",
-            "Avg Budget",
-            "Median Budget",
-        ],
-        datasets : [
-            {
-                label: "USD",
-                data: [budgetSlider, 481396, 438494],
-                borderColor: "rgb(75,192,192)",
-                borderWidth: "1", 
-            },
-        ],
-    };
-
-
-    const impressionsData = {
-        labels:[
-            "Booked Impressions",
-            "Delivered Impressions",
-            "Budget",
-        ],
-        datasets : [
-            {
-                label: "Impressions",
-                data: [impressionCount, (impressionCount*1.2), budgetSlider],
-                borderColor: "rgb(75,192,192)",
-                borderWidth: "1",
-            },
-            {
-                label: "USD",
-                data: [budgetSlider, budgetSlider, budgetSlider],
-            },
-        ],
-    };
     
+
+    
+
+
     // end test
     return (
         <div className="SliderContainer">
             <div className="categorySelection">
-                
-                <select id="dropdown" value={selectedCategory} onChange={handleCategoryChange}>
-                <option value="">Campaign Category</option>
-                <option value="item1">Auto</option>
-                <option value="item2">Pharmaceutical</option>
-                <option value="item3">Financial</option>
-                <option value="item4">Pay Per View </option>
-                <option value="item5">Travel</option>
-                <option value="item6">Consumer Package Goods</option>
-                </select>
-                {/* Maybe add brand specific later? */}
-                <div className="categoryTitle">
-                    <h1>{categoryNames[selectedCategory]}</h1>
+                <div className="dropdownDiv">
+                    <CustomDropdown className="dropdown" options={["Auto", "Pharma", "Financial", "Pay per View", "Travel","Consumer Package Goods"]} defaultValue={selectedCategory ? selectedCategory : "Category"} //prevents dualstate rerender 
+                    selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} onOptionChange={handleOptionChange} />
                 </div>
+                <div className="categoryTitle">
+                    {(() => {
+                        switch (selectedCategory) {
+                        case 'Auto':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","Coupes","Sedans","Trucks","EVs"]}
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} 
+                            onOptionChange={handleOptionChange}/></div>;
+                        case 'Pharma':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","Psoriasis","Diabetes","Blood Pressure","Tummy Ache"]} 
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} 
+                            onOptionChange={handleOptionChange}/></div>;
+                        case 'Financial':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","Venture Capital","ForEx","Money"]} 
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} 
+                            onOptionChange={handleOptionChange}/></div>;
+                        case 'Pay per View':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","UFC","Movies","TV"]} 
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} 
+                            onOptionChange={handleOptionChange}/></div>;
+                        case 'Travel':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","Airline","Cruise","Domestic","International"]} 
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
+                            onOptionChange={handleOptionChange}/></div>;
+                        case 'Consumer Package Goods':
+                            return <div className="categoryTitle"><CustomDropdown options={["General","Grocery","Wholesaler","Electronics"]} 
+                            defaultValue="General" selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
+                            onOptionChange={handleOptionChange}/></div>;
+                        default:
+                            return <div className="categoryTitle">Select a Category</div>;
+                        }
+                    })()}
+
+                </div>
+                
                 <div className="categoryImage">
                     <img src={categoryImages[selectedCategory]}></img>
                 </div>
@@ -320,35 +324,58 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
             </div> */}
             <div className="metricContainer">
                 <div className="dataEntry">
-                    <div className="dataField">
-                        <h3> Lift</h3>
-                        <input className="liftInput" type="text" placeholder={liftSlider} 
-                            onChange={(e) => setLiftInput(e.target.value)}
-                        />
-                    </div>
-                    <div className="dataField">
-                        <h3> Budget</h3>
-                        <input className="budgetInput" type="text" placeholder={budgetSlider} 
-                            onChange={(e) => setBudgetInput(e.target.value)}
-                        />
-                    </div>
-                    <div className="dataField">
-                        <h3> Impression Count</h3>
-                        <input type="text" placeholder={impressionCount}
-                            onChange={(e) => setImpressionInput(e.target.value)}
-                        />
-                    </div>
-                    <div className="dataField">
-                        <h3> Campaign Weeks</h3>
-                        <input type="text" placeholder={campaignWeeks} 
-                            onChange={(e) => setCampaignInput(e.target.value)}
-                        />
-                    </div>
-                    <div className="dataField">
-                        <h3> Avg Frequency</h3>
-                        <input type="text" placeholder={avgFreq}
-                            onChange={(e) => setFrequencyInput(e.target.value)}
-                        />
+                    <div className="dataTabHeader">
+                        <div className="tabs">
+                            <div className={`tab ${activeTab === "Values" ? 'active' : ''}`} onClick={() => setActiveTab("Values")}>
+                                Values
+                            </div>
+                            <div className={`tab ${activeTab === 'Conversation' ? 'active' : ''}`} onClick={() => setActiveTab('Conversation')}>
+                                Conversation
+                            </div>
+                        </div>
+                        {activeTab === 'Values' && (
+                            
+                            <div className="dataDisplay">
+                            <div className="dataField">
+                                <h3> Lift</h3>
+                                <input className="liftInput" type="text" placeholder={liftSlider.toLocaleString()} 
+                                    onChange={(e) => setLiftInput(e.target.value)}
+                                />
+                            </div>
+                            <div className="dataField">
+                                <h3> Budget</h3>
+                                <input className="budgetInput" type="text" placeholder={budgetSlider.toLocaleString()} 
+                                    onChange={(e) => setBudgetInput(e.target.value)}
+                                />
+                            </div>
+                            <div className="dataField">
+                                <h3> Impression Count</h3>
+                                <input type="text" className="impressionInput" placeholder={impressionCount.toLocaleString()}
+                                    onChange={(e) => setImpressionInput(e.target.value)}
+                                />
+                            </div>
+                            <div className="dataField">
+                                <h3> Campaign Weeks</h3>
+                                <input className="campaignInput" type="text" placeholder={campaignWeeks.toLocaleString()} 
+                                    onChange={(e) => setCampaignInput(e.target.value)}
+                                />
+                            </div>
+                            <div className="dataField">
+                                <h3> Avg Frequency</h3>
+                                <input className="frequencyInput" type="text" placeholder={avgFreq.toLocaleString()}
+                                    onChange={(e) => setFrequencyInput(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        )}
+                        {activeTab === 'Conversation' && (
+                            <div className="overWriteChat">
+                                <ChatBody />
+                                {/* <ChatText className="overWriteChatText" messageList={['test','text','new']} />
+                                <ChatInput className="overWriteChatInput"/> */}
+                            </div>
+                        )}
+                        
                     </div>
                 </div>
                 <div className="metrics">
@@ -363,15 +390,14 @@ const SliderContainer = ({command, shrinkMain, graphText}) => {
                     <button onClick={handleMetricSubmit}>Submit</button>
                 </div>
             </div>
-            <div className="plotDiv">
-                {/*<Line data={data}/>*/}
+            {/* <div className="plotDiv">
                 <div className="graphSlot">
                     <Bar data={data} height={"300%"} options={{maintainAspectRatio: false}}/>
                 </div>
                 <div className="graphSlot">
                     <Bar data={dataTest} height={"300%"} options={{maintainAspectRatio: false}} />
                 </div>
-            </div>
+            </div> */}
             <div className="plotDiv">
                 {[...graphArray].map((graphData, i) => <div className="graphSlot" onDoubleClick={() => removeGraph(i)}> {createGraphComponent(graphData)} </div>)}
             </div>

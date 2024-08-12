@@ -1,32 +1,40 @@
 .categorySelection {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  margin-bottom: 0px;
   height: auto; 
-  width: 100%;
   display: flex;
   align-items: center;
   /* border-bottom: solid 2px grey; */
   flex-direction: row;
   justify-content: space-between; 
+
 }
 
-.categorySelection select {
-margin-bottom: 20px;
-flex: 1;
-margin-right: 0px; 
-}
 
-.dropdown {
-  justify-content: center;
-}
 
 .categorySelection option {
 background-color: red; 
 color: white; 
 }
 
+.subcategory {
+  text-align: center;
+  border: none;
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none; 
+  background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat;
+  background-position: right 5px center;
+  background-size: 25px; 
+  font-family: inherit; 
+  font-size: inherit;
+  cursor: pointer; 
+  padding-right: 5%; 
+  padding-left: 3%;
+  font-weight: 500;
+}
+
 .categoryImage {
-margin-bottom: 20px;
+margin-bottom: 0%;
 flex: 1; 
 justify-content: flex-end;
 display: flex;
@@ -35,11 +43,23 @@ margin-left: 20px;
 }
 
 .categoryTitle {
-flex: 2; 
+margin-bottom: 1%;
+flex: 1; 
 display: flex;
 justify-content: center; 
 align-items: center;
-margin-bottom: 20px;
+font-size: x-large;
+font-weight: 900;
+}
+
+.dropdownDiv{
+  flex: 1; 
+  display: flex;
+  align-items: center;
+  font-size: x-large;
+  font-weight: 900;
+  margin-bottom: 1%;
+
 }
 
 .categorySelection label {
@@ -48,8 +68,9 @@ margin-bottom: 20px;
   color: #333; /* Dark grey */
 }
 
-.categorySelection select {
+.dropdown {
   padding: 10px;
+  margin-bottom: 10px;
   border-radius: 5px; 
   border: 1px solid #ccc;
   background-color: #f8f8f8; 
@@ -57,6 +78,8 @@ margin-bottom: 20px;
   color: #333; 
   outline: none;
   cursor: pointer;
+  width: 50%;
+  align-self: flex-start;
 }
 
 .plotDiv{
@@ -74,6 +97,7 @@ margin-bottom: 20px;
 
 .categorySelection option {
   padding: 10px; 
+  
 }
 
 .categorySelection select:hover,
@@ -86,12 +110,26 @@ margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr 2fr; /* Divide the container into 1/3 and 2/3 */
   grid-template-rows: auto 1fr auto; /* Define rows for content, flexible space, and footer */
-  height: 100%;
+  height: 80vh;
   width: 100%;
   /* border-bottom: solid 2px grey; */
   border-top: solid 2px grey;
   border-bottom: solid 2px grey;
 
+}
+
+.metricContainer > *:nth-child(odd) { /* Targeting odd children, assuming they are in the first column */
+  position: relative;
+}
+
+.metricContainer > *:nth-child(odd)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px; /* Width of the border */
+  background-color: grey; /* Color of the border */
 }
 
 .dataEntry{
@@ -102,23 +140,23 @@ margin-bottom: 20px;
 .metrics {
   grid-column: 2 / 3; /* Take up the second column */
   grid-row: 1 / 2; /* Position in the first row */
+  padding: 5vh;
 }
 
 .metricFooter {
   display: grid;
-  grid-template-columns: 1fr 2fr; /* Divide the container into 1/3 and 2/3 */
-  grid-template-rows: auto 1fr auto; /* Define rows for content, flexible space, and footer */
+  grid-template-columns: 1fr 2fr; 
+  grid-template-rows: auto 1fr auto; 
   height: 100%;
   width: inherit;
   margin-bottom: 5%;
-  /* border-right: solid black 2px; */
+  /* border: solid black 2px; */
 }
 
 .metricFooter button{
-  width: 80%;
-  height: 100%;
+  width: 100%;
   padding-bottom: 5%;
-  margin-left: 110%;
+  margin-left: 100%;
   padding-top: 5%;
   border-radius: 10px;
   font-size: larger;
@@ -126,14 +164,18 @@ margin-bottom: 20px;
   font-weight: 800;
   background-color: #000000;
   color: white;
-
+  bottom: 0;
 
 }
 
+.dataDisplay{
+  margin-top: 2%;
+}
 
 .dataField{
   align-items: center;
   height: 10vh;
+  padding: 10px;
 }
 
 .dataField input{
@@ -146,3 +188,51 @@ margin-bottom: 20px;
   box-sizing: border-box; 
   transition: border-color 0.2s ease-in-out; 
 }
+
+.dataTabHeader{
+  position: inherit;
+  height: 5vh;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.tabs {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  margin-right: 0px;
+  flex: 1;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #e2e2e2;
+}
+
+.tab.active {
+  background-color: #ddd;
+  border-bottom: none; /* Makes it look like the tab is connected to the content area */
+
+}
+
+.overWriteChat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f0f0f0; /* Light grey background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for depth */
+  height: 62vh;
+}
+

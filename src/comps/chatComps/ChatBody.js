@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect, useContext } from "react";
 import ChatInput from "./ChatInput";
 import ChatText from "./ChatText";
 import ChatHeader from "./ChatHeader";
 import load from "../../assets/loadingGifSmall.gif"
 import axios from "axios";
 import "./ChatBody.css";
+import { AppContext } from "../../App";
 
 
 export const ChatBody = ({setChatIsOpen, setCommand, setShrinkMain}) => {
@@ -13,11 +14,8 @@ export const ChatBody = ({setChatIsOpen, setCommand, setShrinkMain}) => {
               report to this one. Updates UL tag as message list, where both user and server messages are stored.
     Props   : Boolean value for whether or not the chat should be displayed. 
   */
-  const initMessage = {
-    text: "Welcome! Feel free to ask any questions!",
-    sender: "defaultText",
-  };
-  const [messageList, setMessageList] = useState([initMessage]);
+  const {messageList, setMessageList} = useContext(AppContext);
+
 
   useEffect(() => {
     // This will log the updated state
@@ -97,10 +95,10 @@ export const ChatBody = ({setChatIsOpen, setCommand, setShrinkMain}) => {
     <div className="ChatBody">
       {/* Display all main comps, pass necessary props down. Not prop drilling bc all these directly use their
           relevant props, but might have to be a useContext depending on what additions need to be made.   */}
-      <ChatHeader />
-      <button className="closeChatButton" onClick={closeChat}>
+      {/* <ChatHeader /> */}
+      {/* <button className="closeChatButton" onClick={closeChat}>
         ⌄
-      </button>
+      </button> */}
       <ChatText messageList={messageList} /> 
       <ChatInput onMessageSubmit={handleMessageSubmit} />
     </div>

@@ -5,18 +5,37 @@
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
     padding: 10px 20px;
+    padding-right: 0;
     transition: width 0.3s ease-in-out;
-    width: 98.2%;
+    width: 98%;
+    height: 2.2rem;
+    margin-bottom: 1vh;
   }
 
   .header.shrink{
     transition: width 0.3s ease-in-out;
-    width: 55%;
+    width: 58%;
+  }
+
+
+
+  .dishMediaLogo.shrink{
+    width: 60%;
+    height: 50%;
   }
   
   .leftColumn {
     flex: 1;
     text-align: left;
+
+  }
+
+  .profileImg{
+    height: 5vh;
+    width: 5vh;
+    margin-top: 1.25vh;
+    border: 2px rgb(221,221,221) solid;
+    border-radius: 40px;
   }
   
   .pageTitle {
@@ -26,7 +45,13 @@
     font-weight: 600;
     font-size: 200%;
     line-height: 1.5;
+    padding-top: 1%;
     text-align: center;
+    overflow-x: auto;
+  }
+
+  .pageTitle.shrink{
+    font-size: 3vh;
   }
 
   .helpButton{
